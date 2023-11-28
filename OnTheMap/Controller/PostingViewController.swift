@@ -11,10 +11,23 @@ import UIKit
 class PostingViewController: UIViewController {
    
     
+    @IBOutlet weak var locationText: UITextField!
+    
+  
+    
+    
     @IBAction func cancelPost(_ sender: UIButton) {
         
         dismiss(animated: true, completion: nil)
         
     }
     
+    @IBAction func enterLocation(_ sender: UITextField) {
+        
+        
+    }
+    
+    @IBAction func findOnMap(_ sender: UIButton) {
+        performSegue(withIdentifier: "findOnMap", sender: nil)
+    }
 }

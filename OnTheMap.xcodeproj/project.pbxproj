@@ -19,6 +19,7 @@
 		3FB389552B0D4328006CAD3E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FB389532B0D4328006CAD3E /* LaunchScreen.storyboard */; };
 		3FB389602B0E8235006CAD3E /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB3895F2B0E8235006CAD3E /* LoginViewController.swift */; };
 		3FB389622B0E8495006CAD3E /* earth.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FB389612B0E8495006CAD3E /* earth.png */; };
+		3FECDE6D2B164CB30042046C /* GeoCodingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FECDE6C2B164CB30042046C /* GeoCodingViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		3FB389562B0D4328006CAD3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3FB3895F2B0E8235006CAD3E /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		3FB389612B0E8495006CAD3E /* earth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = earth.png; sourceTree = "<group>"; };
+		3FECDE6C2B164CB30042046C /* GeoCodingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoCodingViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 				3F26CFE32B154A7C002BB761 /* MapViewController.swift */,
 				3F26CFE52B154A96002BB761 /* LocationListViewController.swift */,
 				3F26CFE72B155518002BB761 /* PostingViewController.swift */,
+				3FECDE6C2B164CB30042046C /* GeoCodingViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -183,6 +186,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FB389602B0E8235006CAD3E /* LoginViewController.swift in Sources */,
+				3FECDE6D2B164CB30042046C /* GeoCodingViewController.swift in Sources */,
 				3F26CFE82B155518002BB761 /* PostingViewController.swift in Sources */,
 				3FB3894D2B0D4326006CAD3E /* ViewController.swift in Sources */,
 				3FB389492B0D4326006CAD3E /* AppDelegate.swift in Sources */,

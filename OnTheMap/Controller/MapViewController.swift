@@ -28,6 +28,19 @@ class MapViewController: UIViewController{
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
+        UdacityClient.getPublicUserData(userID: "3903878747") { userData, error in
+            if let userData = userData {
+                
+                // Access the user data using the appropriate property or method
+                //print(userData.firstName)
+            } else {
+                // Handle error
+                if let error = error {
+                    print("Error: \(error)")
+                }
+            }
+        }
+        
     }
     
     //MARK: Map and Pins Functionality 
@@ -38,12 +51,17 @@ class MapViewController: UIViewController{
     //MARK: BarButton Items
     
     @IBAction func postPinBarButton(_ sender: UIBarButtonItem) {
-        
+        print("here")
+        print("passed this line")
         performSegue(withIdentifier: "postPin", sender: nil)
     }
     
     @IBAction func logOut(_ sender: UIBarButtonItem) {
-        
+        UdacityClient.logout {
+            DispatchQueue.main.async {
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
         
     }
 }

@@ -56,7 +56,11 @@ class LocationListViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     @IBAction func logout(_ sender: UIBarButtonItem) {
-        
+        UdacityClient.logout {
+            DispatchQueue.main.async {
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
     
 }

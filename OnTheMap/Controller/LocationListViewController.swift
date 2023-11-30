@@ -10,7 +10,7 @@ import UIKit
 
 class LocationListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    var students: [StudentInformation] = []
+    var students: [StudentLocation] = []
     
     
     @IBOutlet weak var tableView: UITableView!

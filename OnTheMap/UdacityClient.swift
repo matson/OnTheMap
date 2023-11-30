@@ -8,9 +8,7 @@
 import Foundation
 
 class UdacityClient {
-    
-    //Getting Student locations: https://onthemap-api.udacity.com/v1/StudentLocation
-    
+    //https://onthemap-api.udacity.com/v1/StudentLocation/<objectId>
     struct Auth {
         
         static var sessionId = ""
@@ -25,6 +23,8 @@ class UdacityClient {
         case logOut
         case getData(String)
         case getLocation
+        case postLocation
+        case updateLocation(String)
         
         var stringValue: String {
             
@@ -32,7 +32,9 @@ class UdacityClient {
             case .createSessionId: return Endpoints.baseUdacityAPI + "/session"
             case .logOut: return Endpoints.baseUdacityAPI + "/session"
             case .getData(let userId): return Endpoints.baseUdacityAPI + "/users/" + userId
-            case .getLocation: return Endpoints.baseUdacityAPI + "/StudentLocation"
+            case .getLocation: return Endpoints.baseUdacityAPI + "/StudentLocation?limit=100"
+            case .postLocation: return Endpoints.baseUdacityAPI + "/StudentLocation"
+            case .updateLocation(let objectId): return Endpoints.baseUdacityAPI + "/StudentLocation/" + objectId
                 
             }
         }
@@ -88,9 +90,83 @@ class UdacityClient {
         task.resume()
     }
     
+    class func taskForPOSTRequestLocation<RequestType: Encodable, ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, body: RequestType, completion: @escaping (ResponseType?, Error?) -> Void) {
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = try! JSONEncoder().encode(body)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(nil, error)
+                }
+                return
+            }
+            let decoder = JSONDecoder()
+            do {
+                
+                let responseObject = try decoder.decode(ResponseType.self, from: data)
+                DispatchQueue.main.async {
+                    completion(responseObject, nil)
+                }
+            } catch {
+                //print("error here")
+                do {
+                    let errorResponse = try decoder.decode(SessionResponse.self, from: data) as Error
+                    DispatchQueue.main.async {
+                        completion(nil, errorResponse)
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        completion(nil, error)
+                    }
+                }
+            }
+        }
+        task.resume()
+    }
+    
+    //PUT
+    class func taskForPUTRequestLocation<RequestType: Encodable, ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, body: RequestType, completion: @escaping (ResponseType?, Error?) -> Void) {
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.httpBody = try! JSONEncoder().encode(body)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(nil, error)
+                }
+                return
+            }
+            let decoder = JSONDecoder()
+            do {
+                
+                let responseObject = try decoder.decode(ResponseType.self, from: data)
+                print(responseObject)
+                DispatchQueue.main.async {
+                    completion(responseObject, nil)
+                }
+            } catch {
+                //print("error here")
+                do {
+                    let errorResponse = try decoder.decode(SessionResponse.self, from: data) as Error
+                    DispatchQueue.main.async {
+                        completion(nil, errorResponse)
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        completion(nil, error)
+                    }
+                }
+            }
+        }
+        task.resume()
+    }
+    
     //GET
     class func taskForGETRequest<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) -> URLSessionDataTask {
-        //print(url)
+        print(url)
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data else {
                 DispatchQueue.main.async {
@@ -108,6 +184,43 @@ class UdacityClient {
                     completion(responseObject, nil)
                 }
             } catch {
+                do {
+                    let errorResponse = try decoder.decode(SessionResponse.self, from: data) as Error
+                    DispatchQueue.main.async {
+                        completion(nil, errorResponse)
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        completion(nil, error)
+                    }
+                }
+            }
+        }
+        task.resume()
+        
+        return task
+    }
+    
+    //GET
+    class func taskForGETRequestNormal<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) -> URLSessionDataTask {
+        //print(url)
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(nil, error)
+                }
+                return
+            }
+            //print("We here")
+            let decoder = JSONDecoder()
+            do {
+                let responseObject = try decoder.decode([String: [ResponseType]].self, from: data)
+                //print(responseObject)
+//                DispatchQueue.main.async {
+//                    completion(responseObject as! ResponseType, nil)
+//                }
+            } catch {
+                //print("HERE OPPS")
                 do {
                     let errorResponse = try decoder.decode(SessionResponse.self, from: data) as Error
                     DispatchQueue.main.async {
@@ -178,4 +291,42 @@ class UdacityClient {
         }
         task.resume()
     }
+    
+    //Getting Student Locations
+    class func getStudentLocation(completion: @escaping (StudentLocation?, Error?) -> Void) {
+        taskForGETRequestNormal(url: Endpoints.getLocation.url, responseType: StudentLocation.self) { response, error in
+            if let response = response {
+                completion(response, nil)
+            } else {
+                completion(nil, error)
+            }
+        }
+    }
+    
+    //Posting a Student Location
+    class func postStudentLocation(uniqueKey: String, firstName: String, lastName: String, mapString: String, mediaURL: String, latitude: Double, longitude: Double, completion: @escaping (Bool, Error?) -> Void){
+        let studentLocation = PostStudentLocation(uniqueKey: uniqueKey, firstName: firstName, lastName: lastName, mapString: mapString, mediaURL: mediaURL, latitude: latitude, longitude: longitude)
+        taskForPOSTRequestLocation(url: Endpoints.postLocation.url, responseType: PostLocationResponse.self, body: studentLocation) { response, error in
+            if let response = response {
+                completion(true, nil)
+            } else {
+                completion(false, nil)
+            }
+        }
+    }
+
+    
+    //Putting a Student Location
+    class func putStudentLocation(objectId: String, uniqueKey: String, firstName: String, lastName: String, mapString: String, mediaURL: String, latitude: Double, longitude: Double, completion: @escaping (Bool, Error?) -> Void){
+        let studentLocation = PostStudentLocation(uniqueKey: uniqueKey, firstName: firstName, lastName: lastName, mapString: mapString, mediaURL: mediaURL, latitude: latitude, longitude: longitude)
+        taskForPUTRequestLocation(url: Endpoints.updateLocation(objectId).url, responseType: UpdateLocationResponse.self, body: studentLocation) { response, error in
+            if let response = response {
+                completion(true, nil)
+            } else {
+                completion(false, nil)
+            }
+        }
+        
+    }
+    
 }

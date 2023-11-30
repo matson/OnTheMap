@@ -7,20 +7,19 @@
 
 import Foundation
 
-
-struct StudentInformation: Codable {
+struct StudentLocation: Codable {
     
-    let objectId: String
-    let uniqueKey: String
     let firstName: String
     let lastName: String
+    let longitude: Double
+    let latitude: Double
     let mapString: String
     let mediaURL: String
-    let latitude: Float
-    let longitude: Float
-    let createdAt: Date
-    let updatedAt: Date
-    //let ACL: AnyClass
-    
-    
+    let uniqueKey: String
+    let objectId: String
+    let createdAt: String
+    let updatedAt: String
 }
+
+
+

@@ -28,23 +28,60 @@ class MapViewController: UIViewController{
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
-        UdacityClient.getPublicUserData(userID: "3903878747") { userData, error in
-            if let userData = userData {
-                
-                // Access the user data using the appropriate property or method
-                //print(userData.firstName)
-            } else {
-                // Handle error
-                if let error = error {
-                    print("Error: \(error)")
+//        UdacityClient.getPublicUserData(userID: "3903878747") { userData, error in
+//            if let userData = userData {
+//                
+//                // Access the user data using the appropriate property or method
+//                //print(userData.firstName)
+//            } else {
+//                // Handle error
+//                if let error = error {
+//                    print("Error: \(error)")
+//                }
+//            }
+//        }
+        
+//        UdacityClient.getStudentLocation { studentData, error in
+//            if let studentData = studentData {
+//
+//                // Access the user data using the appropriate property or method
+//                print(studentData.longitude)
+//            } else {
+//                // Handle error
+//                if let error = error {
+//                    print("Error: \(error)")
+//                }
+//            }
+//        }
+//
+        
+//        UdacityClient.postStudentLocation(uniqueKey: "1234", firstName: "John", lastName: "Doe", mapString: "Mountain View, CA", mediaURL: "https://udacity.com", latitude: 37.386052, longitude: -122.083851) { success, error in
+//            if success {
+//                print("yes")
+//            }
+//            else{
+//                print("nah")
+//            }
+//        }
+        
+        UdacityClient.putStudentLocation(objectId: "8ZExGR5uX8", uniqueKey: "1234", firstName: "John", lastName: "Doe", mapString: "Philly", mediaURL: "https://udacity.com", latitude: 35.386052, longitude: -107.083851) { success, error in
+                    if success {
+                        print("yes")
+                    }
+                    else{
+                        print("nah")
+                    }
                 }
-            }
-        }
+        
+        
         
     }
     
+       
     //MARK: Map and Pins Functionality 
     
+        
+        
     
     
     

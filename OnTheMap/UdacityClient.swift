@@ -129,6 +129,7 @@ class UdacityClient {
     //PUT
     class func taskForPUTRequestLocation<RequestType: Encodable, ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, body: RequestType, completion: @escaping (ResponseType?, Error?) -> Void) {
         var request = URLRequest(url: url)
+        print(url)
         request.httpMethod = "PUT"
         request.httpBody = try! JSONEncoder().encode(body)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -139,6 +140,7 @@ class UdacityClient {
                 }
                 return
             }
+            print("here before decoding")
             let decoder = JSONDecoder()
             do {
                 
@@ -202,7 +204,7 @@ class UdacityClient {
     }
     
     //GET
-    class func taskForGETRequestNormal<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) -> URLSessionDataTask {
+    class func taskForGETRequestNormal<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completion: @escaping ([ResponseType]?, Error?) -> Void) -> URLSessionDataTask {
         //print(url)
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data else {
@@ -211,14 +213,31 @@ class UdacityClient {
                 }
                 return
             }
+            //let responseObject = try decoder.decode([String: [ResponseType]].self, from: data)
             //print("We here")
             let decoder = JSONDecoder()
             do {
-                let responseObject = try decoder.decode([String: [ResponseType]].self, from: data)
-                //print(responseObject)
-//                DispatchQueue.main.async {
-//                    completion(responseObject as! ResponseType, nil)
-//                }
+//                if let responseValue = responseObject.values.first?.first {
+//                                DispatchQueue.main.async {
+//                                    completion(responseValue, nil)
+//                                }
+//                            } else {
+//                                DispatchQueue.main.async {
+//                                    completion(nil, error)
+//                                }
+//                            }
+                //let responseObject = try decoder.decode([String: [ResponseType]].self, from: data)
+                let responseObject = try decoder.decode([ResponseType].self, from: data)
+                print(responseObject)
+                do{
+                    DispatchQueue.main.async {
+                        completion(responseObject, nil)
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        completion(nil, error)
+                    }
+                }
             } catch {
                 //print("HERE OPPS")
                 do {
@@ -263,7 +282,7 @@ class UdacityClient {
         }
     }
     
-    //Deleting a Session 
+    //Deleting a Session
     class func logout(completion: @escaping () -> Void) {
         var request = URLRequest(url: Endpoints.logOut.url)
         request.httpMethod = "DELETE"
@@ -293,9 +312,10 @@ class UdacityClient {
     }
     
     //Getting Student Locations
-    class func getStudentLocation(completion: @escaping (StudentLocation?, Error?) -> Void) {
+    class func getStudentLocation(completion: @escaping ([StudentLocation]?, Error?) -> Void) {
         taskForGETRequestNormal(url: Endpoints.getLocation.url, responseType: StudentLocation.self) { response, error in
             if let response = response {
+                print("i got here!")
                 completion(response, nil)
             } else {
                 completion(nil, error)
@@ -314,7 +334,7 @@ class UdacityClient {
             }
         }
     }
-
+    
     
     //Putting a Student Location
     class func putStudentLocation(objectId: String, uniqueKey: String, firstName: String, lastName: String, mapString: String, mediaURL: String, latitude: Double, longitude: Double, completion: @escaping (Bool, Error?) -> Void){

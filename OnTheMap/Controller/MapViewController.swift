@@ -53,25 +53,25 @@ class MapViewController: UIViewController{
 //                }
 //            }
 //        }
-//
-        
+
+//        
 //        UdacityClient.postStudentLocation(uniqueKey: "1234", firstName: "John", lastName: "Doe", mapString: "Mountain View, CA", mediaURL: "https://udacity.com", latitude: 37.386052, longitude: -122.083851) { success, error in
 //            if success {
-//                print("yes")
+//                print("added student successfully")
 //            }
 //            else{
 //                print("nah")
 //            }
 //        }
-        
-        UdacityClient.putStudentLocation(objectId: "8ZExGR5uX8", uniqueKey: "1234", firstName: "John", lastName: "Doe", mapString: "Philly", mediaURL: "https://udacity.com", latitude: 35.386052, longitude: -107.083851) { success, error in
-                    if success {
-                        print("yes")
-                    }
-                    else{
-                        print("nah")
-                    }
-                }
+//        
+//        UdacityClient.putStudentLocation(objectId: "bji6d8rcspggujsjjd10", uniqueKey: "1234", firstName: "John", lastName: "Doe", mapString: "Cupertino, CA", mediaURL: "https://udacity.com", latitude: 37.322998, longitude: -122.032182) { success, error in
+//                    if success {
+//                        print("changed student successfully")
+//                    }
+//                    else{
+//                        print("nah")
+//                    }
+//                }
         
         
         
@@ -80,7 +80,7 @@ class MapViewController: UIViewController{
        
     //MARK: Map and Pins Functionality 
     
-        
+    //notes here 
         
     
     

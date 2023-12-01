@@ -21,7 +21,6 @@ class LocationListViewController: UIViewController, UITableViewDataSource, UITab
         tableView.dataSource = self
         
         //call the getStudentLocation method here to populate table.
-        
         UdacityClient.getStudentLocation { studentData, error in
             if let studentData = studentData {
                 self.student.append(contentsOf: studentData)

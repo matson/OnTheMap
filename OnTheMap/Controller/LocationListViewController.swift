@@ -19,49 +19,26 @@ class LocationListViewController: UIViewController, UITableViewDataSource, UITab
         
         tableView.delegate = self
         tableView.dataSource = self
-    
+        
         //call the getStudentLocation method here to populate table.
         
         UdacityClient.getStudentLocation { studentData, error in
             if let studentData = studentData {
-                // Assuming studentData is an array of StudentLocation objects
-
-                // Clear the existing studentLocations array
-                DataManager.shared.studentLocations.removeAll()
-
-                // Iterate over each StudentLocation object and append to the studentLocations array
-//                for studentLocation in studentData {
-//                    let locationDict: [String: Any] = [
-//                        "firstName": studentLocation.firstName,
-//                        "lastName": studentLocation.lastName,
-//                        "latitude": studentLocation.latitude,
-//                        "longitude": studentLocation.longitude,
-//                        "link": studentLocation.mediaURL,
-//                        "location": studentLocation.mapString
-//                    ]
-//                    DataManager.shared.studentLocations.append(locationDict)
-//                }
-//
-//                print(DataManager.shared.studentLocations)
-                DataManager.shared.studentLocations.append(contentsOf: studentData)
-                print(self.student)
-                self.tableView.reloadData()
-
-            } else {
-                // Handle error
-                if let error = error {
-                    print("Error: \(error)")
+                self.student.append(contentsOf: studentData)
+                DispatchQueue.main.async {
+                           self.tableView.reloadData()
                 }
             }
+            else{
+                print("nah")
+            }
         }
-        
-        
+ 
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
         super.viewWillAppear(animated)
-        //tableView.reloadData()
         
     }
     
@@ -80,9 +57,9 @@ class LocationListViewController: UIViewController, UITableViewDataSource, UITab
         let students = self.student[(indexPath as NSIndexPath).row]
         
         //setting student name to label property of table cell
-        //let firstName = students["firstName"] as? String
-        //let lastName = students["lastName"] as? String
-        //cell.textLabel?.text = firstName ?? "" + (lastName ?? "")
+        let firstName = students.firstName
+        let lastName = students.lastName
+        cell.textLabel?.text = firstName + " " + lastName
         
         return cell
     }

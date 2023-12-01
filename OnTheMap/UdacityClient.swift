@@ -204,7 +204,7 @@ class UdacityClient {
     }
     
     //GET
-    class func taskForGETRequestNormal<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completion: @escaping ([ResponseType]?, Error?) -> Void) -> URLSessionDataTask {
+    class func taskForGETRequestNormal<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) -> URLSessionDataTask {
         //print(url)
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data else {
@@ -216,41 +216,52 @@ class UdacityClient {
             //let responseObject = try decoder.decode([String: [ResponseType]].self, from: data)
             //print("We here")
             let decoder = JSONDecoder()
-            do {
-//                if let responseValue = responseObject.values.first?.first {
-//                                DispatchQueue.main.async {
-//                                    completion(responseValue, nil)
-//                                }
-//                            } else {
-//                                DispatchQueue.main.async {
-//                                    completion(nil, error)
-//                                }
-//                            }
-                //let responseObject = try decoder.decode([String: [ResponseType]].self, from: data)
-                let responseObject = try decoder.decode([ResponseType].self, from: data)
-                print(responseObject)
-                do{
-                    DispatchQueue.main.async {
-                        completion(responseObject, nil)
-                    }
-                } catch {
-                    DispatchQueue.main.async {
-                        completion(nil, error)
-                    }
-                }
-            } catch {
-                //print("HERE OPPS")
+            DispatchQueue.main.async {
                 do {
-                    let errorResponse = try decoder.decode(SessionResponse.self, from: data) as Error
-                    DispatchQueue.main.async {
-                        completion(nil, errorResponse)
-                    }
+                    // Decoding the JSON response to match the 'results' array structure
+                    let responseObject = try decoder.decode(StudentInformationResponse.self, from: data)
+                    //completion(responseObject.results, nil)
                 } catch {
-                    DispatchQueue.main.async {
-                        completion(nil, error)
-                    }
+                    // Error handling if decoding fails
+                    completion(nil, error)
                 }
             }
+        
+//            do {
+////                if let responseValue = responseObject.values.first?.first {
+////                                DispatchQueue.main.async {
+////                                    completion(responseValue, nil)
+////                                }
+////                            } else {
+////                                DispatchQueue.main.async {
+////                                    completion(nil, error)
+////                                }
+////                            }
+//                //let responseObject = try decoder.decode([String: [ResponseType]].self, from: data)
+//                let responseObject = try decoder.decode([ResponseType].self, from: data)
+//                print(responseObject)
+//                do{
+//                    DispatchQueue.main.async {
+//                        completion(responseObject, nil)
+//                    }
+//                } catch {
+//                    DispatchQueue.main.async {
+//                        completion(nil, error)
+//                    }
+//                }
+//            } catch {
+//                //print("HERE OPPS")
+//                do {
+//                    let errorResponse = try decoder.decode(SessionResponse.self, from: data) as Error
+//                    DispatchQueue.main.async {
+//                        completion(nil, errorResponse)
+//                    }
+//                } catch {
+//                    DispatchQueue.main.async {
+//                        completion(nil, error)
+//                    }
+//                }
+//            }
         }
         task.resume()
         
@@ -313,14 +324,31 @@ class UdacityClient {
     
     //Getting Student Locations
     class func getStudentLocation(completion: @escaping ([StudentLocation]?, Error?) -> Void) {
-        taskForGETRequestNormal(url: Endpoints.getLocation.url, responseType: StudentLocation.self) { response, error in
-            if let response = response {
-                print("i got here!")
-                completion(response, nil)
-            } else {
+//        taskForGETRequestNormal(url: Endpoints.getLocation.url, responseType: StudentInformationResponse.self) { response, error in
+//            if let response = response {
+//                print("i got here!")
+//                completion(response, nil)
+//            } else {
+//                completion(nil, error)
+//            }
+//        }
+        let request = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation")!)
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data else {
+                completion(nil, error)
+                return
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let response = try decoder.decode(StudentInformationResponse.self, from: data)
+                //print(response)
+                completion(response.results, nil)
+            } catch {
                 completion(nil, error)
             }
         }
+        task.resume()
     }
     
     //Posting a Student Location

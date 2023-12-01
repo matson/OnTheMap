@@ -28,9 +28,35 @@ class MapViewController: UIViewController{
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
+    }
+    
+       
+    //MARK: Map and Pins Functionality 
+    
+    //notes here 
+        
+    
+    
+    
+    //MARK: BarButton Items
+    
+    @IBAction func postPinBarButton(_ sender: UIBarButtonItem) {
+        performSegue(withIdentifier: "postPin", sender: nil)
+    }
+    
+    @IBAction func logOut(_ sender: UIBarButtonItem) {
+        UdacityClient.logout {
+            DispatchQueue.main.async {
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
+        
+    }
+}
+
 //        UdacityClient.getPublicUserData(userID: "3903878747") { userData, error in
 //            if let userData = userData {
-//                
+//
 //                // Access the user data using the appropriate property or method
 //                //print(userData.firstName)
 //            } else {
@@ -54,7 +80,7 @@ class MapViewController: UIViewController{
 //            }
 //        }
 
-//        
+//
 //        UdacityClient.postStudentLocation(uniqueKey: "1234", firstName: "John", lastName: "Doe", mapString: "Mountain View, CA", mediaURL: "https://udacity.com", latitude: 37.386052, longitude: -122.083851) { success, error in
 //            if success {
 //                print("added student successfully")
@@ -63,7 +89,7 @@ class MapViewController: UIViewController{
 //                print("nah")
 //            }
 //        }
-//        
+//
 //        UdacityClient.putStudentLocation(objectId: "bji6d8rcspggujsjjd10", uniqueKey: "1234", firstName: "John", lastName: "Doe", mapString: "Cupertino, CA", mediaURL: "https://udacity.com", latitude: 37.322998, longitude: -122.032182) { success, error in
 //                    if success {
 //                        print("changed student successfully")
@@ -72,33 +98,3 @@ class MapViewController: UIViewController{
 //                        print("nah")
 //                    }
 //                }
-        
-        
-        
-    }
-    
-       
-    //MARK: Map and Pins Functionality 
-    
-    //notes here 
-        
-    
-    
-    
-    //MARK: BarButton Items
-    
-    @IBAction func postPinBarButton(_ sender: UIBarButtonItem) {
-        print("here")
-        print("passed this line")
-        performSegue(withIdentifier: "postPin", sender: nil)
-    }
-    
-    @IBAction func logOut(_ sender: UIBarButtonItem) {
-        UdacityClient.logout {
-            DispatchQueue.main.async {
-                self.dismiss(animated: true, completion: nil)
-            }
-        }
-        
-    }
-}

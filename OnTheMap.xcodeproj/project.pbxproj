@@ -15,6 +15,7 @@
 		3F9336692B1692E2005F28F3 /* SessionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9336682B1692E2005F28F3 /* SessionRequest.swift */; };
 		3F93366B2B1693AA005F28F3 /* SessionResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F93366A2B1693AA005F28F3 /* SessionResponse.swift */; };
 		3FB24FBB2B18FFFE00543F50 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB24FBA2B18FFFE00543F50 /* DataManager.swift */; };
+		3FB24FBE2B196BAF00543F50 /* StudentInformationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB24FBD2B196BAF00543F50 /* StudentInformationResponse.swift */; };
 		3FB389492B0D4326006CAD3E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB389482B0D4326006CAD3E /* AppDelegate.swift */; };
 		3FB3894B2B0D4326006CAD3E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB3894A2B0D4326006CAD3E /* SceneDelegate.swift */; };
 		3FB3894D2B0D4326006CAD3E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB3894C2B0D4326006CAD3E /* ViewController.swift */; };
@@ -40,6 +41,7 @@
 		3F9336682B1692E2005F28F3 /* SessionRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRequest.swift; sourceTree = "<group>"; };
 		3F93366A2B1693AA005F28F3 /* SessionResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionResponse.swift; sourceTree = "<group>"; };
 		3FB24FBA2B18FFFE00543F50 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		3FB24FBD2B196BAF00543F50 /* StudentInformationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentInformationResponse.swift; sourceTree = "<group>"; };
 		3FB389452B0D4326006CAD3E /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FB389482B0D4326006CAD3E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3FB3894A2B0D4326006CAD3E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				3FF63C672B17AD5F0081FFD2 /* UserData.swift */,
 				3FF63C692B17FAB80081FFD2 /* PostLocationResponse.swift */,
 				3FF63C6D2B1804C20081FFD2 /* UpdateLocationResponse.swift */,
+				3FB24FBD2B196BAF00543F50 /* StudentInformationResponse.swift */,
 			);
 			name = Responses;
 			sourceTree = "<group>";
@@ -250,6 +253,7 @@
 				3FF63C682B17AD5F0081FFD2 /* UserData.swift in Sources */,
 				3FECDE6D2B164CB30042046C /* GeoCodingViewController.swift in Sources */,
 				3F26CFE82B155518002BB761 /* PostingViewController.swift in Sources */,
+				3FB24FBE2B196BAF00543F50 /* StudentInformationResponse.swift in Sources */,
 				3FF63C6A2B17FAB80081FFD2 /* PostLocationResponse.swift in Sources */,
 				3FB24FBB2B18FFFE00543F50 /* DataManager.swift in Sources */,
 				3FF63C662B179ADE0081FFD2 /* LogoutResponse.swift in Sources */,

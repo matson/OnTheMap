@@ -25,14 +25,14 @@ class LocationListViewController: UIViewController, UITableViewDataSource, UITab
             if let studentData = studentData {
                 self.student.append(contentsOf: studentData)
                 DispatchQueue.main.async {
-                           self.tableView.reloadData()
+                    self.tableView.reloadData()
                 }
             }
             else{
                 print("nah")
             }
         }
- 
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -61,6 +61,27 @@ class LocationListViewController: UIViewController, UITableViewDataSource, UITab
         cell.textLabel?.text = firstName + " " + lastName
         
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // Handle the tap on the cell
+        let selectedData = student[indexPath.row]
+        let urlString = selectedData.mediaURL
+
+        if !urlString.isEmpty {
+            if let url = URL(string: urlString) {
+                if UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url)
+                } else {
+                    print("Invalid URL")
+                }
+            } else {
+                print("Invalid URL string")
+            }
+        } else {
+            print("Invalid mediaURL")
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     //MARK: BarButton Items

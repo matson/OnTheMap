@@ -132,20 +132,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 //            }
 //        }
         
-//        UdacityClient.getStudentLocation { studentData, error in
-//            if let studentData = studentData {
-//
-//                // Access the user data using the appropriate property or method
-//                print(studentData.longitude)
-//            } else {
-//                // Handle error
-//                if let error = error {
-//                    print("Error: \(error)")
-//                }
-//            }
-//        }
 
-//
+
 //        UdacityClient.postStudentLocation(uniqueKey: "1234", firstName: "John", lastName: "Doe", mapString: "Mountain View, CA", mediaURL: "https://udacity.com", latitude: 37.386052, longitude: -122.083851) { success, error in
 //            if success {
 //                print("added student successfully")

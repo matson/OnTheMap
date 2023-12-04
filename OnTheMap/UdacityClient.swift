@@ -378,3 +378,10 @@ class UdacityClient {
     }
     
 }
+
+//Things left to do:
+//need to finish the posting your location functionality.
+//need to see how to take the text in the texfield and match to lat long coordinates on next page
+//figure out the map thing
+//then test to see if your pin got added.
+

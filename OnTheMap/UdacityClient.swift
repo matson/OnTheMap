@@ -93,6 +93,7 @@ class UdacityClient {
     class func taskForPOSTRequestLocation<RequestType: Encodable, ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, body: RequestType, completion: @escaping (ResponseType?, Error?) -> Void) {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
+        print(body)
         request.httpBody = try! JSONEncoder().encode(body)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -106,6 +107,7 @@ class UdacityClient {
             do {
                 
                 let responseObject = try decoder.decode(ResponseType.self, from: data)
+                print(responseObject)
                 DispatchQueue.main.async {
                     completion(responseObject, nil)
                 }
@@ -275,6 +277,7 @@ class UdacityClient {
         taskForPOSTRequest(url: Endpoints.createSessionId.url, responseType: SessionResponse.self, body: body) { response, error in
             if let response = response {
                 Auth.sessionId = response.session.id
+                UserSessionManager.shared.userKey = response.account.key
                 completion(true, nil)
             } else {
                 completion(false, nil)

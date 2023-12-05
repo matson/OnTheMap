@@ -14,12 +14,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var mapView: MKMapView!
     
     var locations = DataManager.shared.studentLocations
+    var newPinCoordinate: CLLocationCoordinate2D?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         mapView.delegate = self
-        //mapView.dataSource = self
         
         
         //to adjust map on screen:
@@ -34,8 +34,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         UdacityClient.getStudentLocation { studentData, error in
             if let studentData = studentData {
+                
                 self.locations.append(contentsOf: studentData)
-                print(self.locations.count)
                 
                 var annotations = [MKPointAnnotation]()
                 
@@ -60,6 +60,17 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                     
                     // Finally we place the annotation in an array of annotations.
                     annotations.append(annotation)
+                    
+                    
+                    if let newPinCoordinate = self.newPinCoordinate {
+                        print("we got here")
+                        let annotationPost = MKPointAnnotation()
+                        annotationPost.coordinate = newPinCoordinate
+                        // Add the annotation to the map view
+                        self.mapView.addAnnotation(annotationPost)
+                    }
+
+                    
         
                 }
                
@@ -117,6 +128,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
         
     }
+    
 }
 
 //        UdacityClient.getPublicUserData(userID: "3903878747") { userData, error in

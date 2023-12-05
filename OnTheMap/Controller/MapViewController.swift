@@ -32,6 +32,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshMap), name: NSNotification.Name("NewPinAdded"), object: nil)
+        
         UdacityClient.getStudentLocation { studentData, error in
             if let studentData = studentData {
                 
@@ -61,22 +63,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                     // Finally we place the annotation in an array of annotations.
                     annotations.append(annotation)
                     
-//                    print("got here")
-//                    print(self.newPinCoordinate)
-//                    if let newPinCoordinate = self.newPinCoordinate {
-//                        print("we got here")
-//                        let annotationPost = MKPointAnnotation()
-//                        annotationPost.coordinate = newPinCoordinate
-//                        // Add the annotation to the map view
-//                        self.mapView.addAnnotation(annotationPost)
-//                    }
-                    //print(self.newPinAnnotation)
-                    if let newPinAnnotation = self.newPinAnnotation {
-                        print("there is a value")
-                        self.mapView.addAnnotation(newPinAnnotation)
-                    }
-
-                    
         
                 }
                
@@ -87,6 +73,47 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             }
         }
         
+    }
+    
+    @objc func refreshMap() {
+        UdacityClient.getStudentLocation { studentData, error in
+            if let studentData = studentData {
+                
+                self.locations.append(contentsOf: studentData)
+                
+                var annotations = [MKPointAnnotation]()
+                
+                for location in self.locations {
+                    // Notice that the float values are being used to create CLLocationDegree values.
+                    // This is a version of the Double type.
+                    let lat = CLLocationDegrees(location.latitude)
+                    let long = CLLocationDegrees(location.longitude)
+                    
+                    // The lat and long are used to create a CLLocationCoordinates2D instance.
+                    let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
+                    
+                    let first = location.firstName
+                    let last = location.lastName
+                    let mediaURL = location.mediaURL
+                    
+                    // Here we create the annotation and set its coordiate, title, and subtitle properties
+                    let annotation = MKPointAnnotation()
+                    annotation.coordinate = coordinate
+                    annotation.title = "\(first) \(last)"
+                    annotation.subtitle = mediaURL
+                    
+                    // Finally we place the annotation in an array of annotations.
+                    annotations.append(annotation)
+                    
+        
+                }
+               
+                self.mapView.addAnnotations(annotations)
+            }
+            else{
+                print("nah")
+            }
+        }
     }
     
        
@@ -134,6 +161,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
         
     }
+    
+   
     
 }
 

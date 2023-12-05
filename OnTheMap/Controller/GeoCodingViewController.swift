@@ -22,7 +22,7 @@ class GeoCodingViewController: UIViewController {
     var longitude: Double = 0.00
     var latitude: Double = 0.00
     let userId = UserSessionManager.shared.userKey
-    var newPinCoordinates: CLLocationCoordinate2D?
+    
     
     
     
@@ -45,7 +45,7 @@ class GeoCodingViewController: UIViewController {
                     if let latitude = coordinate?.latitude, let longitude = coordinate?.longitude {
                         self.latitude = latitude
                         self.longitude = longitude
-                        self.newPinCoordinates = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                        
                         // Use the coordinate to place the location on the map
                         let annotation = MKPointAnnotation()
                         annotation.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
@@ -81,19 +81,25 @@ class GeoCodingViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    var isSeguePerformed = false
+    
     @IBAction func submit(_ sender: UIButton) {
-        print("submit")
+        
+        // Check if linkTextField is empty or contains only whitespace
+        guard let linkText = linkTextField.text, !linkText.isEmpty else {
+            // Show an alert to the user indicating that linkTextField is required
+            let alert = UIAlertController(title: "Error", message: "Please provide a link", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
+            return
+        }
+    
         UdacityClient.postStudentLocation(uniqueKey: userId!, firstName: firstName, lastName: lastName, mapString: self.locationText!, mediaURL: self.linkTextField.text!, latitude: latitude, longitude: longitude) { success, error in
             if success {
-                print("added student successfully")
-                print("I'm first")
-                DispatchQueue.main.async {
-                    if !self.isSeguePerformed {
-                        self.isSeguePerformed = true
-                        self.performSegue(withIdentifier: "backToMap", sender: nil)
-                    }
-                }
+                
+                NotificationCenter.default.post(name: NSNotification.Name("NewPinAdded"), object: nil)
+                //dismiss to go back to tab bar screen
+                self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
+                
             } else {
                 print("nah")
             }
@@ -101,32 +107,11 @@ class GeoCodingViewController: UIViewController {
         
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "backToMap" && !isSeguePerformed {
-            print("hello I'm here")
-            print(self.newPinCoordinates)
-            //not a nil value
-            if let mapViewController = segue.destination as? MapViewController {
-                print("cool I got here")
-                //will not get here because setup is wrong I believe
-                mapViewController.newPinAnnotation = MKPointAnnotation()
-                mapViewController.newPinAnnotation?.coordinate = newPinCoordinates ?? CLLocationCoordinate2D()
-            }
-        }
-    }
     
     
 }
 
-//}  else {
-//    // Show an alert if the text field is empty
-//    let alertController = UIAlertController(title: "Error", message: "Please enter a link", preferredStyle: .alert)
-//    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-//    alertController.addAction(okAction)
-//    present(alertController, animated: true, completion: nil)
-//
-//    return
-//}
+
 
 
 

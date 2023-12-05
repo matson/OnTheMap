@@ -18,11 +18,6 @@ class PostingViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func enterLocation(_ sender: UITextField) {
-        
-        
-    }
-    
     @IBAction func findOnMap(_ sender: UIButton) {
         
         //if the user has not entered a location string...

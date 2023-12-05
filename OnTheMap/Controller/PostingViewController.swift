@@ -39,6 +39,7 @@ class PostingViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print("hello there I am called")
         if segue.identifier == "findOnMap" {
             if let destinationVC = segue.destination as? GeoCodingViewController {
                 destinationVC.locationText = locationText.text

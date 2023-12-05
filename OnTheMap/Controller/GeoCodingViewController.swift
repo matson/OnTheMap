@@ -22,6 +22,7 @@ class GeoCodingViewController: UIViewController {
     var longitude: Double = 0.00
     var latitude: Double = 0.00
     let userId = UserSessionManager.shared.userKey
+    var newPinCoordinates: CLLocationCoordinate2D?
     
     
     
@@ -44,6 +45,7 @@ class GeoCodingViewController: UIViewController {
                     if let latitude = coordinate?.latitude, let longitude = coordinate?.longitude {
                         self.latitude = latitude
                         self.longitude = longitude
+                        self.newPinCoordinates = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
                         // Use the coordinate to place the location on the map
                         let annotation = MKPointAnnotation()
                         annotation.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
@@ -79,31 +81,36 @@ class GeoCodingViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    
-    @IBAction func linkToShare(_ sender: UITextField) {
-        
-    }
-    
+    var isSeguePerformed = false
     @IBAction func submit(_ sender: UIButton) {
-
+        print("submit")
         UdacityClient.postStudentLocation(uniqueKey: userId!, firstName: firstName, lastName: lastName, mapString: self.locationText!, mediaURL: self.linkTextField.text!, latitude: latitude, longitude: longitude) { success, error in
             if success {
                 print("added student successfully")
-                self.performSegue(withIdentifier: "backToMap", sender: nil)
-            }
-            else{
+                print("I'm first")
+                DispatchQueue.main.async {
+                    if !self.isSeguePerformed {
+                        self.isSeguePerformed = true
+                        self.performSegue(withIdentifier: "backToMap", sender: nil)
+                    }
+                }
+            } else {
                 print("nah")
             }
         }
         
     }
     
-    //send the coordinates to the map tab view
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "backToMap" {
-            if let destinationVC = segue.destination as? MapViewController {
-                let coordinates = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-                destinationVC.newPinCoordinate = coordinates
+        if segue.identifier == "backToMap" && !isSeguePerformed {
+            print("hello I'm here")
+            print(self.newPinCoordinates)
+            //not a nil value
+            if let mapViewController = segue.destination as? MapViewController {
+                print("cool I got here")
+                //will not get here because setup is wrong I believe
+                mapViewController.newPinAnnotation = MKPointAnnotation()
+                mapViewController.newPinAnnotation?.coordinate = newPinCoordinates ?? CLLocationCoordinate2D()
             }
         }
     }

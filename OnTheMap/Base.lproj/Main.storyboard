@@ -241,9 +241,6 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <action selector="linkToShare:" destination="qBC-yt-zVm" eventType="editingDidEnd" id="Ffg-iW-7y1"/>
-                                </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GhD-a3-lXd">
                                 <rect key="frame" x="157" y="648" width="78" height="35"/>
@@ -252,7 +249,6 @@
                                 <buttonConfiguration key="configuration" style="plain" title="Submit"/>
                                 <connections>
                                     <action selector="submit:" destination="qBC-yt-zVm" eventType="touchUpInside" id="AaD-fh-Nj4"/>
-                                    <segue destination="oAw-Js-tqZ" kind="presentation" identifier="backToMap" id="4v4-j3-fqS"/>
                                 </connections>
                             </button>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KN6-lK-bPl">
@@ -267,6 +263,7 @@
                     <connections>
                         <outlet property="linkTextField" destination="YAC-IS-66u" id="Y7N-dx-gRf"/>
                         <outlet property="mapView" destination="KN6-lK-bPl" id="dBw-9O-6JM"/>
+                        <segue destination="2IE-GY-iSI" kind="presentation" identifier="backToMap" id="u14-o0-jSM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wuw-nl-dUU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -367,7 +364,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="x5W-hq-gK4"/>
-        <segue reference="4v4-j3-fqS"/>
+        <segue reference="u14-o0-jSM"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrowshape.turn.up.left.fill" catalog="system" width="128" height="104"/>

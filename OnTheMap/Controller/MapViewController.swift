@@ -14,7 +14,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var mapView: MKMapView!
     
     var locations = DataManager.shared.studentLocations
-    var newPinCoordinate: CLLocationCoordinate2D?
+    var newPinAnnotation: MKPointAnnotation?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,13 +61,19 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                     // Finally we place the annotation in an array of annotations.
                     annotations.append(annotation)
                     
-                    
-                    if let newPinCoordinate = self.newPinCoordinate {
-                        print("we got here")
-                        let annotationPost = MKPointAnnotation()
-                        annotationPost.coordinate = newPinCoordinate
-                        // Add the annotation to the map view
-                        self.mapView.addAnnotation(annotationPost)
+//                    print("got here")
+//                    print(self.newPinCoordinate)
+//                    if let newPinCoordinate = self.newPinCoordinate {
+//                        print("we got here")
+//                        let annotationPost = MKPointAnnotation()
+//                        annotationPost.coordinate = newPinCoordinate
+//                        // Add the annotation to the map view
+//                        self.mapView.addAnnotation(annotationPost)
+//                    }
+                    //print(self.newPinAnnotation)
+                    if let newPinAnnotation = self.newPinAnnotation {
+                        print("there is a value")
+                        self.mapView.addAnnotation(newPinAnnotation)
                     }
 
                     

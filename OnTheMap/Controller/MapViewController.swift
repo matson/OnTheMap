@@ -14,7 +14,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var mapView: MKMapView!
     
     var locations = DataManager.shared.studentLocations
-    var newPinAnnotation: MKPointAnnotation?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,44 +34,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         NotificationCenter.default.addObserver(self, selector: #selector(refreshMap), name: NSNotification.Name("NewPinAdded"), object: nil)
         
-        UdacityClient.getStudentLocation { studentData, error in
-            if let studentData = studentData {
-                
-                self.locations.append(contentsOf: studentData)
-                
-                var annotations = [MKPointAnnotation]()
-                
-                for location in self.locations {
-                    // Notice that the float values are being used to create CLLocationDegree values.
-                    // This is a version of the Double type.
-                    let lat = CLLocationDegrees(location.latitude)
-                    let long = CLLocationDegrees(location.longitude)
-                    
-                    // The lat and long are used to create a CLLocationCoordinates2D instance.
-                    let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
-                    
-                    let first = location.firstName
-                    let last = location.lastName
-                    let mediaURL = location.mediaURL
-                    
-                    // Here we create the annotation and set its coordiate, title, and subtitle properties
-                    let annotation = MKPointAnnotation()
-                    annotation.coordinate = coordinate
-                    annotation.title = "\(first) \(last)"
-                    annotation.subtitle = mediaURL
-                    
-                    // Finally we place the annotation in an array of annotations.
-                    annotations.append(annotation)
-                    
-        
-                }
-               
-                self.mapView.addAnnotations(annotations)
-            }
-            else{
-                print("nah")
-            }
-        }
+        refreshMap()
         
     }
     
@@ -166,35 +129,4 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
 }
 
-//        UdacityClient.getPublicUserData(userID: "3903878747") { userData, error in
-//            if let userData = userData {
-//
-//                // Access the user data using the appropriate property or method
-//                //print(userData.firstName)
-//            } else {
-//                // Handle error
-//                if let error = error {
-//                    print("Error: \(error)")
-//                }
-//            }
-//        }
-        
 
-
-//        UdacityClient.postStudentLocation(uniqueKey: "1234", firstName: "John", lastName: "Doe", mapString: "Mountain View, CA", mediaURL: "https://udacity.com", latitude: 37.386052, longitude: -122.083851) { success, error in
-//            if success {
-//                print("added student successfully")
-//            }
-//            else{
-//                print("nah")
-//            }
-//        }
-//
-//        UdacityClient.putStudentLocation(objectId: "bji6d8rcspggujsjjd10", uniqueKey: "1234", firstName: "John", lastName: "Doe", mapString: "Cupertino, CA", mediaURL: "https://udacity.com", latitude: 37.322998, longitude: -122.032182) { success, error in
-//                    if success {
-//                        print("changed student successfully")
-//                    }
-//                    else{
-//                        print("nah")
-//                    }
-//                }

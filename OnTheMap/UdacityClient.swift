@@ -8,7 +8,7 @@
 import Foundation
 
 class UdacityClient {
-    //https://onthemap-api.udacity.com/v1/StudentLocation/<objectId>
+    
     struct Auth {
         
         static var sessionId = ""
@@ -32,7 +32,7 @@ class UdacityClient {
             case .createSessionId: return Endpoints.baseUdacityAPI + "/session"
             case .logOut: return Endpoints.baseUdacityAPI + "/session"
             case .getData(let userId): return Endpoints.baseUdacityAPI + "/users/" + userId
-            case .getLocation: return Endpoints.baseUdacityAPI + "/StudentLocation?limit=100"
+            case .getLocation: return Endpoints.baseUdacityAPI + "/StudentLocation?limit=100&order=-updatedAt"
             case .postLocation: return Endpoints.baseUdacityAPI + "/StudentLocation"
             case .updateLocation(let objectId): return Endpoints.baseUdacityAPI + "/StudentLocation/" + objectId
                 
@@ -47,11 +47,9 @@ class UdacityClient {
     
     //POST
     class func taskForPOSTRequest<RequestType: Encodable, ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, body: RequestType, completion: @escaping (ResponseType?, Error?) -> Void) {
-        //print(url) //not the url
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = try! JSONEncoder().encode(body)
-        //print(body)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -61,20 +59,15 @@ class UdacityClient {
                 }
                 return
             }
-            //print("here past guard")
             let range = 5..<data.count
             let newData = data.subdata(in: range)
             let decoder = JSONDecoder()
             do {
-                //print("here before try")
                 let responseObject = try decoder.decode(ResponseType.self, from: newData)
-                //print("got here to response Obj")
-                //print(responseObject)
                 DispatchQueue.main.async {
                     completion(responseObject, nil)
                 }
             } catch {
-                //print("error here")
                 do {
                     let errorResponse = try decoder.decode(SessionResponse.self, from: data) as Error
                     DispatchQueue.main.async {
@@ -93,7 +86,6 @@ class UdacityClient {
     class func taskForPOSTRequestLocation<RequestType: Encodable, ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, body: RequestType, completion: @escaping (ResponseType?, Error?) -> Void) {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        print(body)
         request.httpBody = try! JSONEncoder().encode(body)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -112,7 +104,6 @@ class UdacityClient {
                     completion(responseObject, nil)
                 }
             } catch {
-                //print("error here")
                 do {
                     let errorResponse = try decoder.decode(SessionResponse.self, from: data) as Error
                     DispatchQueue.main.async {
@@ -142,7 +133,6 @@ class UdacityClient {
                 }
                 return
             }
-            print("here before decoding")
             let decoder = JSONDecoder()
             do {
                 
@@ -152,7 +142,6 @@ class UdacityClient {
                     completion(responseObject, nil)
                 }
             } catch {
-                //print("error here")
                 do {
                     let errorResponse = try decoder.decode(SessionResponse.self, from: data) as Error
                     DispatchQueue.main.async {
@@ -170,7 +159,6 @@ class UdacityClient {
     
     //GET
     class func taskForGETRequest<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) -> URLSessionDataTask {
-        print(url)
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data else {
                 DispatchQueue.main.async {
@@ -207,68 +195,25 @@ class UdacityClient {
     
     //GET
     class func taskForGETRequestNormal<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) -> URLSessionDataTask {
-        //print(url)
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data else {
-                DispatchQueue.main.async {
-                    completion(nil, error)
-                }
+                completion(nil, error)
                 return
             }
-            //let responseObject = try decoder.decode([String: [ResponseType]].self, from: data)
-            //print("We here")
-            let decoder = JSONDecoder()
-            DispatchQueue.main.async {
-                do {
-                    // Decoding the JSON response to match the 'results' array structure
-                    let responseObject = try decoder.decode(StudentInformationResponse.self, from: data)
-                    //completion(responseObject.results, nil)
-                } catch {
-                    // Error handling if decoding fails
-                    completion(nil, error)
-                }
+            do {
+                let decoder = JSONDecoder()
+                let response = try decoder.decode(ResponseType.self, from: data)
+                //print(response)
+                completion(response, nil)
+            } catch {
+                completion(nil, error)
             }
-        
-//            do {
-////                if let responseValue = responseObject.values.first?.first {
-////                                DispatchQueue.main.async {
-////                                    completion(responseValue, nil)
-////                                }
-////                            } else {
-////                                DispatchQueue.main.async {
-////                                    completion(nil, error)
-////                                }
-////                            }
-//                //let responseObject = try decoder.decode([String: [ResponseType]].self, from: data)
-//                let responseObject = try decoder.decode([ResponseType].self, from: data)
-//                print(responseObject)
-//                do{
-//                    DispatchQueue.main.async {
-//                        completion(responseObject, nil)
-//                    }
-//                } catch {
-//                    DispatchQueue.main.async {
-//                        completion(nil, error)
-//                    }
-//                }
-//            } catch {
-//                //print("HERE OPPS")
-//                do {
-//                    let errorResponse = try decoder.decode(SessionResponse.self, from: data) as Error
-//                    DispatchQueue.main.async {
-//                        completion(nil, errorResponse)
-//                    }
-//                } catch {
-//                    DispatchQueue.main.async {
-//                        completion(nil, error)
-//                    }
-//                }
-//            }
         }
         task.resume()
         
         return task
     }
+    
     
     //Posting a Session
     class func createSessionId(username: String, password: String, completion: @escaping (Bool, Error?) -> Void) {
@@ -316,7 +261,7 @@ class UdacityClient {
             let newData = data!.subdata(in: range)
             let decoder = JSONDecoder()
             do {
-                let responseObject = try decoder.decode(LogoutResponse.self, from: newData)
+              let responseObject = try decoder.decode(LogoutResponse.self, from: newData)
             } catch {
                 print("error")
             }
@@ -324,34 +269,20 @@ class UdacityClient {
         }
         task.resume()
     }
-    
+   
     //Getting Student Locations
     class func getStudentLocation(completion: @escaping ([StudentLocation]?, Error?) -> Void) {
-//        taskForGETRequestNormal(url: Endpoints.getLocation.url, responseType: StudentInformationResponse.self) { response, error in
-//            if let response = response {
-//                print("i got here!")
-//                completion(response, nil)
-//            } else {
-//                completion(nil, error)
-//            }
-//        }
-        let request = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation?limit=100&order=-updatedAt")!)
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let data = data else {
-                completion(nil, error)
-                return
-            }
-            
-            do {
-                let decoder = JSONDecoder()
-                let response = try decoder.decode(StudentInformationResponse.self, from: data)
-                //print(response)
-                completion(response.results, nil)
-            } catch {
+        taskForGETRequestNormal(url: Endpoints.getLocation.url, responseType: StudentInformationResponse.self) { response, error in
+            if let response = response {
+                if let studentInformationResponse = response as? StudentInformationResponse {
+                    completion(studentInformationResponse.results, nil)
+                } else {
+                    completion(nil, error)
+                }
+            } else {
                 completion(nil, error)
             }
         }
-        task.resume()
     }
     
     //Posting a Student Location
@@ -382,9 +313,4 @@ class UdacityClient {
     
 }
 
-//Things left to do:
-//need to finish the posting your location functionality.
-//need to see how to take the text in the texfield and match to lat long coordinates on next page
-//figure out the map thing
-//then test to see if your pin got added.
 

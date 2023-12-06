@@ -28,6 +28,7 @@ class GeoCodingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         if let location = locationText {
             // Make a network request to a geocoding service using the location value
             // Handle the response and update the map view accordingly
@@ -74,7 +75,6 @@ class GeoCodingViewController: UIViewController {
             }
         }
     }
-    
     
     @IBAction func cancel(_ sender: UIButton) {
         

@@ -21,15 +21,21 @@ class LocationListViewController: UIViewController, UITableViewDataSource, UITab
         tableView.dataSource = self
         
         //call the getStudentLocation method here to populate table.
-        UdacityClient.getStudentLocation { studentData, error in
-            if let studentData = studentData {
-                self.student.append(contentsOf: studentData)
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
+        UdacityClient.getStudentLocation { studentData, error, success in
+            if success {
+                if let studentData = studentData {
+                    self.student.append(contentsOf: studentData)
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
                 }
             }
             else{
-                print("nah")
+                // Handle failure and notify the user
+                let alert = UIAlertController(title: "Error", message: "Failed to download student locations.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                
             }
         }
         
@@ -62,12 +68,12 @@ class LocationListViewController: UIViewController, UITableViewDataSource, UITab
         
         return cell
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Handle the tap on the cell
         let selectedData = student[indexPath.row]
         let urlString = selectedData.mediaURL
-
+        
         if !urlString.isEmpty {
             if let url = URL(string: urlString) {
                 if UIApplication.shared.canOpenURL(url) {

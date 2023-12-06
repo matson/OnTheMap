@@ -12,6 +12,7 @@ import MapKit
 
 class GeoCodingViewController: UIViewController {
     
+    @IBOutlet weak var activityView: UIActivityIndicatorView!
     @IBOutlet weak var linkTextField: UITextField!
     @IBOutlet weak var mapView: MKMapView!
     
@@ -30,13 +31,23 @@ class GeoCodingViewController: UIViewController {
         super.viewDidLoad()
         
         if let location = locationText {
+            
+            activityView.startAnimating()
             // Make a network request to a geocoding service using the location value
             // Handle the response and update the map view accordingly
             geocoder.geocodeAddressString(location) { (placemarks, error) in
                 if let error = error {
                     // Handle any errors that occurred during geocoding
                     print("Geocoding error: \(error.localizedDescription)")
+                    
+                    // Show an alert to the user indicating the geocoding failed
+                    let alert = UIAlertController(title: "Geocoding Error", message: "Failed to geocode the provided location", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    
+                    self.activityView.stopAnimating()
                     return
+                    
                 }
                 
                 if let placemark = placemarks?.first {
@@ -59,6 +70,7 @@ class GeoCodingViewController: UIViewController {
                     }
                     
                 }
+                self.activityView.stopAnimating()
             }
         }
         
@@ -70,7 +82,9 @@ class GeoCodingViewController: UIViewController {
             } else {
                 // Handle error
                 if let error = error {
-                    print("Error: \(error)")
+                    let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
                 }
             }
         }
@@ -92,7 +106,10 @@ class GeoCodingViewController: UIViewController {
             present(alert, animated: true, completion: nil)
             return
         }
-    
+        
+        // Check if geocoding was successful
+        checkGeoCoding()
+        
         UdacityClient.postStudentLocation(uniqueKey: userId!, firstName: firstName, lastName: lastName, mapString: self.locationText!, mediaURL: self.linkTextField.text!, latitude: latitude, longitude: longitude) { success, error in
             if success {
                 
@@ -101,13 +118,23 @@ class GeoCodingViewController: UIViewController {
                 self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
                 
             } else {
-                print("nah")
+                let alert = UIAlertController(title: "Error", message: "Failed to post the location. Please try again.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             }
         }
         
     }
     
-    
+    func checkGeoCoding(){
+        if latitude == 0.0 || longitude == 0.0 {
+            // Geocoding failed, display an alert to the user
+            let alert = UIAlertController(title: "Geocoding Failed", message: "Unable to geocode the address. Please try again.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
+            return
+        }
+    }
     
 }
 

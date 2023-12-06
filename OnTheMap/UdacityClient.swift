@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class UdacityClient {
     
@@ -45,8 +46,7 @@ class UdacityClient {
         
     }
     
-    //POST
-    class func taskForPOSTRequest<RequestType: Encodable, ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, body: RequestType, completion: @escaping (ResponseType?, Error?) -> Void) {
+    class func taskForPOSTRequest<RequestType: Encodable, ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, body: RequestType, completion: @escaping (ResponseType?, NetworkError?) -> Void) {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = try! JSONEncoder().encode(body)
@@ -55,7 +55,7 @@ class UdacityClient {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data else {
                 DispatchQueue.main.async {
-                    completion(nil, error)
+                    completion(nil, .connectionError)
                 }
                 return
             }
@@ -68,17 +68,11 @@ class UdacityClient {
                     completion(responseObject, nil)
                 }
             } catch {
-                do {
-                    let errorResponse = try decoder.decode(SessionResponse.self, from: data) as Error
-                    DispatchQueue.main.async {
-                        completion(nil, errorResponse)
-                    }
-                } catch {
-                    DispatchQueue.main.async {
-                        completion(nil, error)
-                    }
+                DispatchQueue.main.async {
+                    completion(nil, .invalidCredentials)
                 }
             }
+            
         }
         task.resume()
     }
@@ -97,22 +91,13 @@ class UdacityClient {
             }
             let decoder = JSONDecoder()
             do {
-                
                 let responseObject = try decoder.decode(ResponseType.self, from: data)
-                print(responseObject)
                 DispatchQueue.main.async {
                     completion(responseObject, nil)
                 }
             } catch {
-                do {
-                    let errorResponse = try decoder.decode(SessionResponse.self, from: data) as Error
-                    DispatchQueue.main.async {
-                        completion(nil, errorResponse)
-                    }
-                } catch {
-                    DispatchQueue.main.async {
-                        completion(nil, error)
-                    }
+                DispatchQueue.main.async {
+                    completion(nil, error)
                 }
             }
         }
@@ -135,22 +120,13 @@ class UdacityClient {
             }
             let decoder = JSONDecoder()
             do {
-                
                 let responseObject = try decoder.decode(ResponseType.self, from: data)
-                print(responseObject)
                 DispatchQueue.main.async {
                     completion(responseObject, nil)
                 }
             } catch {
-                do {
-                    let errorResponse = try decoder.decode(SessionResponse.self, from: data) as Error
-                    DispatchQueue.main.async {
-                        completion(nil, errorResponse)
-                    }
-                } catch {
-                    DispatchQueue.main.async {
-                        completion(nil, error)
-                    }
+                DispatchQueue.main.async {
+                    completion(nil, error)
                 }
             }
         }
@@ -171,20 +147,12 @@ class UdacityClient {
             let decoder = JSONDecoder()
             do {
                 let responseObject = try decoder.decode(ResponseType.self, from: newData)
-                print(responseObject)
                 DispatchQueue.main.async {
                     completion(responseObject, nil)
                 }
             } catch {
-                do {
-                    let errorResponse = try decoder.decode(SessionResponse.self, from: data) as Error
-                    DispatchQueue.main.async {
-                        completion(nil, errorResponse)
-                    }
-                } catch {
-                    DispatchQueue.main.async {
-                        completion(nil, error)
-                    }
+                DispatchQueue.main.async {
+                    completion(nil, error)
                 }
             }
         }
@@ -194,19 +162,18 @@ class UdacityClient {
     }
     
     //GET
-    class func taskForGETRequestNormal<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) -> URLSessionDataTask {
+    class func taskForGETRequestNormal<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?, Bool) -> Void) -> URLSessionDataTask {
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data else {
-                completion(nil, error)
+                completion(nil, error, false)
                 return
             }
             do {
                 let decoder = JSONDecoder()
                 let response = try decoder.decode(ResponseType.self, from: data)
-                //print(response)
-                completion(response, nil)
+                completion(response, nil, true)
             } catch {
-                completion(nil, error)
+                completion(nil, error, false)
             }
         }
         task.resume()
@@ -216,16 +183,16 @@ class UdacityClient {
     
     
     //Posting a Session
-    class func createSessionId(username: String, password: String, completion: @escaping (Bool, Error?) -> Void) {
+    class func createSessionId(username: String, password: String, completion: @escaping (Result<Bool, NetworkError>) -> Void) {
         let udacityCredentials = SessionRequest.UdacityCredentials(username: username, password: password)
         let body = SessionRequest(udacity: udacityCredentials)
         taskForPOSTRequest(url: Endpoints.createSessionId.url, responseType: SessionResponse.self, body: body) { response, error in
             if let response = response {
                 Auth.sessionId = response.session.id
                 UserSessionManager.shared.userKey = response.account.key
-                completion(true, nil)
+                completion(.success(true))
             } else {
-                completion(false, nil)
+                completion(.failure(error ?? .unknownError))
             }
         }
     }
@@ -261,7 +228,7 @@ class UdacityClient {
             let newData = data!.subdata(in: range)
             let decoder = JSONDecoder()
             do {
-              let responseObject = try decoder.decode(LogoutResponse.self, from: newData)
+                let responseObject = try decoder.decode(LogoutResponse.self, from: newData)
             } catch {
                 print("error")
             }
@@ -269,18 +236,18 @@ class UdacityClient {
         }
         task.resume()
     }
-   
+    
     //Getting Student Locations
-    class func getStudentLocation(completion: @escaping ([StudentLocation]?, Error?) -> Void) {
-        taskForGETRequestNormal(url: Endpoints.getLocation.url, responseType: StudentInformationResponse.self) { response, error in
+    class func getStudentLocation(completion: @escaping ([StudentLocation]?, Error?, Bool) -> Void) {
+        taskForGETRequestNormal(url: Endpoints.getLocation.url, responseType: StudentInformationResponse.self) { response, error, success in
             if let response = response {
                 if let studentInformationResponse = response as? StudentInformationResponse {
-                    completion(studentInformationResponse.results, nil)
+                    completion(studentInformationResponse.results, nil, true)
                 } else {
-                    completion(nil, error)
+                    completion(nil, error, false)
                 }
             } else {
-                completion(nil, error)
+                completion(nil, error, false)
             }
         }
     }

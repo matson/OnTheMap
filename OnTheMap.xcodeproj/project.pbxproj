@@ -11,6 +11,7 @@
 		3F26CFE42B154A7C002BB761 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F26CFE32B154A7C002BB761 /* MapViewController.swift */; };
 		3F26CFE62B154A96002BB761 /* LocationListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F26CFE52B154A96002BB761 /* LocationListViewController.swift */; };
 		3F26CFE82B155518002BB761 /* PostingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F26CFE72B155518002BB761 /* PostingViewController.swift */; };
+		3F305B142B20E0B5004DEA1A /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F305B132B20E0B5004DEA1A /* NetworkError.swift */; };
 		3F7AFCB12B1E7818001883C5 /* UserSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7AFCB02B1E7818001883C5 /* UserSessionManager.swift */; };
 		3F9336642B166376005F28F3 /* UdacityClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9336632B166376005F28F3 /* UdacityClient.swift */; };
 		3F9336692B1692E2005F28F3 /* SessionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9336682B1692E2005F28F3 /* SessionRequest.swift */; };
@@ -37,6 +38,7 @@
 		3F26CFE32B154A7C002BB761 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		3F26CFE52B154A96002BB761 /* LocationListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListViewController.swift; sourceTree = "<group>"; };
 		3F26CFE72B155518002BB761 /* PostingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostingViewController.swift; sourceTree = "<group>"; };
+		3F305B132B20E0B5004DEA1A /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		3F7AFCB02B1E7818001883C5 /* UserSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSessionManager.swift; sourceTree = "<group>"; };
 		3F9336632B166376005F28F3 /* UdacityClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UdacityClient.swift; sourceTree = "<group>"; };
 		3F9336682B1692E2005F28F3 /* SessionRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRequest.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 		3FB24FBC2B19000800543F50 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				3F305B132B20E0B5004DEA1A /* NetworkError.swift */,
 				3FB24FBA2B18FFFE00543F50 /* DataManager.swift */,
 				3F7AFCB02B1E7818001883C5 /* UserSessionManager.swift */,
 			);
@@ -256,6 +259,7 @@
 				3FB24FBE2B196BAF00543F50 /* StudentInformationResponse.swift in Sources */,
 				3FF63C6A2B17FAB80081FFD2 /* PostLocationResponse.swift in Sources */,
 				3FB24FBB2B18FFFE00543F50 /* DataManager.swift in Sources */,
+				3F305B142B20E0B5004DEA1A /* NetworkError.swift in Sources */,
 				3FF63C662B179ADE0081FFD2 /* LogoutResponse.swift in Sources */,
 				3FB389492B0D4326006CAD3E /* AppDelegate.swift in Sources */,
 				3F26CFE22B15470C002BB761 /* StudentLocation.swift in Sources */,

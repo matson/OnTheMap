@@ -12,7 +12,6 @@ class PostingViewController: UIViewController {
     
     
     @IBOutlet weak var locationText: UITextField!
-    @IBOutlet weak var activityViewIndicator: UIActivityIndicatorView!
     
     @IBAction func cancelPost(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
@@ -22,9 +21,6 @@ class PostingViewController: UIViewController {
         
         //if the user has not entered a location string...
         if let location = locationText.text, !location.isEmpty {
-            
-            activityViewIndicator.startAnimating()
-            
             
             performSegue(withIdentifier: "findOnMap", sender: nil)
             
@@ -38,15 +34,14 @@ class PostingViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print("hello there I am called")
         if segue.identifier == "findOnMap" {
             if let destinationVC = segue.destination as? GeoCodingViewController {
                 destinationVC.locationText = locationText.text
             }
         }
         
-        // Stop animating the activity indicator when the segue is performed
-        activityViewIndicator.stopAnimating()
+        
+        
     }
     
 }

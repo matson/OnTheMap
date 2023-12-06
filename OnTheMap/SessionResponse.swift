@@ -24,8 +24,4 @@ struct SessionResponse: Codable {
     
 }
 
-extension SessionResponse: LocalizedError {
-    var errorDescription: String? {
-        return "something is wrong"
-    }
-}
+

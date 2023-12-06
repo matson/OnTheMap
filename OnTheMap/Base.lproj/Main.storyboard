@@ -207,10 +207,6 @@
                                     <segue destination="qBC-yt-zVm" kind="presentation" identifier="findOnMap" id="T5q-w8-wX9"/>
                                 </connections>
                             </button>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="T2g-E2-vlc">
-                                <rect key="frame" x="185" y="383" width="20" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="TBr-oT-t7q"/>
                         <color key="backgroundColor" systemColor="systemCyanColor"/>
@@ -232,7 +228,6 @@
                     <toolbarItems/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="activityViewIndicator" destination="T2g-E2-vlc" id="RvD-pe-ChK"/>
                         <outlet property="locationText" destination="dmL-T3-mg9" id="3k3-Ca-EOP"/>
                     </connections>
                 </viewController>
@@ -281,6 +276,10 @@
                                 </constraints>
                                 <standardMapConfiguration key="preferredConfiguration"/>
                             </mapView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="m0B-z2-j3H">
+                                <rect key="frame" x="185" y="291" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Oy-l5-Pbv"/>
                         <color key="backgroundColor" systemColor="systemCyanColor"/>
@@ -301,13 +300,14 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityView" destination="m0B-z2-j3H" id="U6E-jE-CT5"/>
                         <outlet property="linkTextField" destination="YAC-IS-66u" id="Y7N-dx-gRf"/>
                         <outlet property="mapView" destination="KN6-lK-bPl" id="dBw-9O-6JM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wuw-nl-dUU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3684.6153846153843" y="8.5308056872037916"/>
+            <point key="canvasLocation" x="3540" y="0.7109004739336493"/>
         </scene>
         <!--List-->
         <scene sceneID="Unr-qL-Phz">

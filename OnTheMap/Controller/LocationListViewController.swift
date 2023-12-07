@@ -57,14 +57,14 @@ class LocationListViewController: UIViewController, UITableViewDataSource, UITab
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PinCell", for:indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "PinCell", for: indexPath) as! PinTableViewCell
         
         let students = self.student[(indexPath as NSIndexPath).row]
         
         //setting student name to label property of table cell
         let firstName = students.firstName
         let lastName = students.lastName
-        cell.textLabel?.text = firstName + " " + lastName
+        cell.label.text = firstName + " " + lastName
         
         return cell
     }

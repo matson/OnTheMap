@@ -32,6 +32,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
+        refreshMap()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(refreshMap), name: NSNotification.Name("NewPinAdded"), object: nil)
         
         refreshMap()

@@ -338,7 +338,7 @@
                                 <rect key="frame" x="0.0" y="56" width="390" height="705"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PinCell" rowHeight="71" id="183-Bh-UBb" userLabel="PinCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PinCell" rowHeight="71" id="183-Bh-UBb" userLabel="PinCell" customClass="PinTableViewCell" customModule="OnTheMap" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="390" height="71"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="183-Bh-UBb" id="ier-JE-0Gg">
@@ -352,9 +352,9 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b73-3U-O1b">
-                                                    <rect key="frame" x="97" y="25" width="69" height="21"/>
+                                                    <rect key="frame" x="97" y="25" width="150" height="21"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="69" id="MHu-us-Lau"/>
+                                                        <constraint firstAttribute="width" constant="150" id="Nfs-JZ-LAb"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -370,6 +370,10 @@
                                                 <constraint firstItem="aDq-id-Lyp" firstAttribute="leading" secondItem="ier-JE-0Gg" secondAttribute="leading" id="l05-G9-hyX"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="label" destination="b73-3U-O1b" id="X7W-rP-g71"/>
+                                            <outlet property="pinImageView" destination="aDq-id-Lyp" id="Y7G-Wu-tzt"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
